@@ -30,7 +30,7 @@ raspi.init(() => {
 });
 
 emitter.on("event", (data) => {
-	dispatch(USER_1, true);
+	dispatch(USER_1, false);
 });
 
 bot.onText(/\/photo/, (data) => {
@@ -49,9 +49,9 @@ function dispatch(chatId, toAll = false) {
 	getImage("/dev/video0", 640, 480, "1").then((data) =>
 		sendPhoto(data, toAll)
 	);
-	getImage("/dev/video1", 640, 480, "1").then((data) =>
-		sendPhoto(data, toAll)
-	);
+	// getImage("/dev/video1", 640, 480, "1").then((data) =>
+	// 	sendPhoto(data, toAll)
+	// );
 }
 
 function sendPhoto(data, toAll = false) {
