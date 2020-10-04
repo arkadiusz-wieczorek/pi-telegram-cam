@@ -36,7 +36,7 @@ emitter.on("event", (data) => {
 bot.onText(/\/photo/, (data) => {
 	console.log(`data.chat.id: ${data.chat.id}`);
 
-	if (chatId == USER_1 || chatId == USER_2) {
+	if (data.chat.id == USER_1 || data.chat.id == USER_2) {
 		dispatch(data.chat.id, false);
 	} else {
 		bot.sendMessage(
