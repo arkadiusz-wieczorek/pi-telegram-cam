@@ -26,89 +26,90 @@ unsigned long previousMillis_pir = 0;
 const long interval_pir = 250;
 
 void setup() {
-	Serial.begin(115200);
+    Serial.begin(115200);
 
-	pinMode(trig, OUTPUT);
-	pinMode(echo, INPUT);
-	pinMode(ledPin, OUTPUT);
-	pinMode(vibrPin, INPUT);
-	pinMode(inputPirPin, INPUT);
+    pinMode(trig, OUTPUT);
+    pinMode(echo, INPUT);
+    pinMode(ledPin, OUTPUT);
+    pinMode(vibrPin, INPUT);
+    pinMode(inputPirPin, INPUT);
 }
 
 void loop() {
-	setLedState();
-	checkDistance();
-	checkVibration();
-	checkMotion();
+    setLedState();
+    checkDistance();
+    checkVibration();
+    checkMotion();
 }
 
 void setLedState() {
-	unsigned long currentMillis = millis();
-	if (currentMillis - previousMillis >= interval_led) {
-		previousMillis = currentMillis;
+    unsigned long currentMillis = millis();
+    if (currentMillis - previousMillis >= interval_led) {
+        previousMillis = currentMillis;
 
-		if (ledState == LOW) {
-			ledState = HIGH;
-		}
-		else {
-			ledState = LOW;
-		}
+        if (ledState == LOW) {
+            ledState = HIGH;
+        }
+        else {
+            ledState = LOW;
+        }
 
-		digitalWrite(ledPin, ledState);
-	}
+        digitalWrite(ledPin, ledState);
+    }
 }
 
 void checkDistance() {
-	unsigned long currentMillis = millis();
-	long duration, distance;
+    unsigned long currentMillis = millis();
+    long duration, distance;
 
-	if (currentMillis - previousMillis_trig >= interval_trig) {
-    previousMillis_trig = currentMillis;
+    if (currentMillis - previousMillis_trig >= interval_trig) {
+		previousMillis_trig = currentMillis;
 
-    digitalWrite(trig, LOW);
-    delayMicroseconds(2);
-    digitalWrite(trig, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(trig, LOW);
+		digitalWrite(trig, LOW);
+		delayMicroseconds(2);
+		digitalWrite(trig, HIGH);
+		delayMicroseconds(10);
+		digitalWrite(trig, LOW);
 
-    duration = pulseIn(echo, HIGH);
-    distance = (duration / 2) / 29.1;
+		duration = pulseIn(echo, HIGH);
+		distance = duration * 0.034 / 2;
 
-    if (distance <= 200) {
-		Serial.print("1");
-    }
-  }
-}
-
-void checkVibration() {
-	unsigned long currentMillis = millis();
-	long measurement;
-	measurement = pulseIn(vibrPin, HIGH);
-
-	if (currentMillis - previousMillis_vibr >= interval_vibr) {
-		previousMillis_vibr = currentMillis;
-
-		if (measurement > 0) {
-			Serial.print("2");
+		// 100cm
+		if (distance <= 100) {
+			Serial.print("1");
 		}
   	}
 }
 
+void checkVibration() {
+    unsigned long currentMillis = millis();
+    long measurement;
+    measurement = pulseIn(vibrPin, HIGH);
+
+    if (currentMillis - previousMillis_vibr >= interval_vibr) {
+        previousMillis_vibr = currentMillis;
+
+        if (measurement > 0) {
+            Serial.print("2");
+        }
+    }
+}
+
 void checkMotion() {
-	unsigned long currentMillis = millis();
-	pirPinStatus = digitalRead(inputPirPin);
+    unsigned long currentMillis = millis();
+    pirPinStatus = digitalRead(inputPirPin);
 
-	if (currentMillis - previousMillis_pir >= interval_pir) {
-		previousMillis_pir = currentMillis;
+    if (currentMillis - previousMillis_pir >= interval_pir) {
+        previousMillis_pir = currentMillis;
 
-		if (pirPinStatus == 1) {
-			pirState = HIGH;
-			Serial.print("3");
-		} else if (pirPinStatus == 0 && pirState == HIGH) {
-			pirState = LOW;
-			// Serial.println("motion end");
-		} else if (pirPinStatus == 0 && pirState == LOW || pirPinStatus == 1 && pirState == HIGH) {
-			// Serial.println("not changed");
-		}
-	}
+        if (pirPinStatus == 1) {
+            pirState = HIGH;
+            Serial.print("3");
+        } else if (pirPinStatus == 0 && pirState == HIGH) {
+            pirState = LOW;
+            // Serial.println("motion end");
+        } else if (pirPinStatus == 0 && pirState == LOW || pirPinStatus == 1 && pirState == HIGH) {
+            // Serial.println("not changed");
+        }
+    }
 }
