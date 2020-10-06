@@ -52,8 +52,8 @@ bot.onText(/\/test/, (data) => {
 
     if (data.chat.id == USER_1 || data.chat.id == USER_2) {
         bot.sendMessage(`Roger that! 🔥`);
-        for (let index = 0; index < 100; index++) {
-            setTimeout(() => dispatch(data.chat.id, false), 250);
+        for (let index = 0; index < 10; index++) {
+            setTimeout(() => dispatch(data.chat.id, false), 1000);
         }
     } else {
         bot.sendMessage(
