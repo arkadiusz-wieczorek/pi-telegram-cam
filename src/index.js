@@ -44,7 +44,7 @@ bot.onText(/\/photo/, (data) => {
 		bot.sendMessage(data.chat.id, `Roger that! 📲`);
 		dispatch(data.chat.id, true);
 	} else {
-		logBlockedUser();
+		logBlockedUser(data);
 	}
 });
 
