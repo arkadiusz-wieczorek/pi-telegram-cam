@@ -38,7 +38,9 @@ bot.onText(/\/photo/, (data) => {
     console.log(`data.chat.id: ${data.chat.id}`);
 
     if (data.chat.id == USER_1 || data.chat.id == USER_2) {
-        dispatch(data.chat.id, false);
+        for (let index = 0; index < 100; index++) {
+            dispatch(data.chat.id, false);
+        }
     } else {
         bot.sendMessage(
             `Block user id: ${data.chat.id}, first_name: ${data.chat.first_name}`
@@ -47,12 +49,12 @@ bot.onText(/\/photo/, (data) => {
 });
 
 function dispatch(chatId, toAll = false) {
-    getImage("/dev/video0", 640, 480, "1").then((data) =>
+    getImage("/dev/video0", 1920, 1080, "1").then((data) =>
         sendPhoto(data, toAll)
     );
-    // getImage("/dev/video1", 640, 480, "1").then((data) =>
-    // 	sendPhoto(data, toAll)
-    // );
+    getImage("/dev/video1", 1920, 1080, "1").then((data) =>
+        sendPhoto(data, toAll)
+    );
 }
 
 function sendPhoto(data, toAll = false) {
