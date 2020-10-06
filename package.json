@@ -5,7 +5,7 @@
 	"main": "src/index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "nodemon start src/index.js",
+		"start": "node src/index.js",
 		"setup": "./setup.sh",
 		"sync": "./sync.sh"
 	},
@@ -16,7 +16,5 @@
 		"node-telegram-bot-api": "^0.50.0",
 		"node-webcam": "^0.6.4"
 	},
-	"devDependencies": {
-		"nodemon": "^2.0.4"
-	}
+	"devDependencies": {}
 }
