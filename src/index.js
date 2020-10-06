@@ -51,13 +51,11 @@ function dispatch(chatId, byUser = false) {
 	);
 
 	if (byUser) {
-		setTimeout(() => {
-			getImage("/dev/video1", 1920, 1080, "1").then((buffer_2) =>
-				bot.sendPhoto(chatId, buffer_2, {
-					caption: new Date(),
-				})
-			);
-		}, 1000);
+		getImage("/dev/video1", 1920, 1080, "1").then((buffer_2) =>
+			bot.sendPhoto(chatId, buffer_2, {
+				caption: new Date(),
+			})
+		);
 	}
 }
 
