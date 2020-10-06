@@ -53,7 +53,7 @@ bot.onText(/\/test/, (data) => {
     if (data.chat.id == USER_1 || data.chat.id == USER_2) {
         bot.sendMessage(`Roger that! 🔥`);
         for (let index = 0; index < 100; index++) {
-            dispatch(data.chat.id, false);
+            setTimeout(() => dispatch(data.chat.id, false), 250);
         }
     } else {
         bot.sendMessage(
