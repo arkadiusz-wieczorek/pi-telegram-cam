@@ -38,6 +38,20 @@ bot.onText(/\/photo/, (data) => {
     console.log(`data.chat.id: ${data.chat.id}`);
 
     if (data.chat.id == USER_1 || data.chat.id == USER_2) {
+        bot.sendMessage(`Roger that! 👀`);
+        dispatch(data.chat.id, false);
+    } else {
+        bot.sendMessage(
+            `Block user id: ${data.chat.id}, first_name: ${data.chat.first_name}`
+        );
+    }
+});
+
+bot.onText(/\/test/, (data) => {
+    console.log(`data.chat.id: ${data.chat.id}`);
+
+    if (data.chat.id == USER_1 || data.chat.id == USER_2) {
+        bot.sendMessage(`Roger that! 🔥`);
         for (let index = 0; index < 100; index++) {
             dispatch(data.chat.id, false);
         }
