@@ -18,7 +18,12 @@ const emitter = ee();
 const getImage = require("./components/camera.js");
 
 // STARTUP
-bot.sendMessage(USER_1, `Restart "pi-telegram-cam" bot - ${new Date()}`);
+bot.sendMessage(
+	USER_1,
+	`Restart "pi-telegram-cam" ${new Date().toLocaleString("pl", {
+		timeZone: "UTC",
+	})}`
+);
 
 // SERIAL PORT INIT
 raspi.init(() => {
@@ -36,7 +41,7 @@ emitter.on("event", (data) => {
 
 bot.onText(/\/photo/, (data) => {
 	if (data.chat.id == USER_1 || data.chat.id == USER_2) {
-		bot.sendMessage(data.chat.id, `Roger that! 👀`);
+		bot.sendMessage(data.chat.id, `Roger that! 📲`);
 		dispatch(data.chat.id, true);
 	} else {
 		logBlockedUser();
@@ -46,14 +51,14 @@ bot.onText(/\/photo/, (data) => {
 function dispatch(chatId, byUser = false) {
 	getImage("/dev/video0", 1920, 1080, "1").then((buffer) =>
 		bot.sendPhoto(chatId, buffer, {
-			caption: new Date(),
+			caption: new Date().toLocaleString("pl", { timeZone: "UTC" }),
 		})
 	);
 
 	if (byUser) {
 		getImage("/dev/video1", 1920, 1080, "1").then((buffer_2) =>
 			bot.sendPhoto(chatId, buffer_2, {
-				caption: new Date(),
+				caption: new Date().toLocaleString("pl", { timeZone: "UTC" }),
 			})
 		);
 	}
