@@ -5,7 +5,7 @@
 const int ledPin = 13;
 int ledState = LOW;
 unsigned long previousMillis = 0;
-long interval_led = 2000;
+long interval_led = 1000;
 
 // state for hc-sr04
 #define trig 8
@@ -23,7 +23,7 @@ const long interval_vibr = 1000;
 int pirState = LOW;
 int pirPinStatus;
 unsigned long previousMillis_pir = 0;
-const long interval_pir = 1500;
+const long interval_pir = 500;
 
 void setup() {
     Serial.begin(115200);
@@ -74,8 +74,8 @@ void checkDistance() {
         duration = pulseIn(echo, HIGH);
         distance = duration * 0.034 / 2;
 
-        // 100cm
-        if (distance <= 100) {
+        // 80cm
+        if (distance <= 80) {
             Serial.print("1");
         }
       }

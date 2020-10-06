@@ -18,7 +18,7 @@ const emitter = ee();
 const getImage = require("./components/camera.js");
 
 // STARTUP
-bot.sendMessage(USER_1, `Restart server "pi-telegram-cam" - ${new Date()}`);
+bot.sendMessage(USER_1, `Restart "pi-telegram-cam" bot - ${new Date()}`);
 
 // SERIAL PORT INIT
 raspi.init(() => {
@@ -31,33 +31,34 @@ raspi.init(() => {
 
 emitter.on("event", (data) => {
 	console.log("event →", data);
-	bot.sendMessage(USER_1, `Catch motion 👮 → ${data}`);
 	dispatch(USER_1);
 });
 
 bot.onText(/\/photo/, (data) => {
 	if (data.chat.id == USER_1 || data.chat.id == USER_2) {
 		bot.sendMessage(data.chat.id, `Roger that! 👀`);
-		dispatch(data.chat.id, false);
+		dispatch(data.chat.id, true);
 	} else {
 		logBlockedUser();
 	}
 });
 
-function dispatch(chatId) {
+function dispatch(chatId, byUser = false) {
 	getImage("/dev/video0", 1920, 1080, "1").then((buffer) =>
 		bot.sendPhoto(chatId, buffer, {
 			caption: new Date(),
 		})
 	);
 
-	setTimeout(() => {
-		getImage("/dev/video1", 1920, 1080, "1").then((buffer_2) =>
-			bot.sendPhoto(chatId, buffer_2, {
-				caption: new Date(),
-			})
-		);
-	}, 1000);
+	if (byUser) {
+		setTimeout(() => {
+			getImage("/dev/video1", 1920, 1080, "1").then((buffer_2) =>
+				bot.sendPhoto(chatId, buffer_2, {
+					caption: new Date(),
+				})
+			);
+		}, 1000);
+	}
 }
 
 function logBlockedUser(data) {
