@@ -11,7 +11,7 @@ long interval_led = 2000;
 #define trig 8
 #define echo 7
 unsigned long previousMillis_trig = 0;
-const long interval_trig = 250;
+const long interval_trig = 2000;
 
 // state for sw-420
 #define vibrPin 3
@@ -23,7 +23,7 @@ const long interval_vibr = 1000;
 int pirState = LOW;
 int pirPinStatus;
 unsigned long previousMillis_pir = 0;
-const long interval_pir = 250;
+const long interval_pir = 1500;
 
 void setup() {
     Serial.begin(115200);
@@ -37,9 +37,9 @@ void setup() {
 
 void loop() {
     setLedState();
-    checkDistance();
     checkVibration();
     checkMotion();
+    checkDistance();
 }
 
 void setLedState() {
@@ -63,22 +63,22 @@ void checkDistance() {
     long duration, distance;
 
     if (currentMillis - previousMillis_trig >= interval_trig) {
-		previousMillis_trig = currentMillis;
+        previousMillis_trig = currentMillis;
 
-		digitalWrite(trig, LOW);
-		delayMicroseconds(2);
-		digitalWrite(trig, HIGH);
-		delayMicroseconds(10);
-		digitalWrite(trig, LOW);
+        digitalWrite(trig, LOW);
+        delayMicroseconds(2);
+        digitalWrite(trig, HIGH);
+        delayMicroseconds(10);
+        digitalWrite(trig, LOW);
 
-		duration = pulseIn(echo, HIGH);
-		distance = duration * 0.034 / 2;
+        duration = pulseIn(echo, HIGH);
+        distance = duration * 0.034 / 2;
 
-		// 100cm
-		if (distance <= 100) {
-			Serial.print("1");
-		}
-  	}
+        // 100cm
+        if (distance <= 100) {
+            Serial.print("1");
+        }
+      }
 }
 
 void checkVibration() {
@@ -109,7 +109,7 @@ void checkMotion() {
             pirState = LOW;
             // Serial.println("motion end");
         } else if (pirPinStatus == 0 && pirState == LOW || pirPinStatus == 1 && pirState == HIGH) {
-            // Serial.println("not changed");
+			// Serial.println("not changed");
         }
     }
 }

@@ -31,62 +31,40 @@ raspi.init(() => {
 
 emitter.on("event", (data) => {
 	console.log("event →", data);
-	dispatch(USER_1, false);
+	bot.sendMessage(USER_1, `Catch motion 👮 → ${data}`);
+	dispatch(USER_1);
 });
 
 bot.onText(/\/photo/, (data) => {
-	console.log(`data.chat.id: ${data.chat.id}`);
-
 	if (data.chat.id == USER_1 || data.chat.id == USER_2) {
 		bot.sendMessage(data.chat.id, `Roger that! 👀`);
 		dispatch(data.chat.id, false);
 	} else {
-		bot.sendMessage(
-			data.chat.id,
-			`Block user id: ${data.chat.id}, first_name: ${data.chat.first_name}`
-		);
+		logBlockedUser();
 	}
 });
 
-bot.onText(/\/test/, (data) => {
-	console.log(`data.chat.id: ${data.chat.id}`);
-
-	if (data.chat.id == USER_1 || data.chat.id == USER_2) {
-		bot.sendMessage(data.chat.id, `Roger that! 🔥`);
-		for (let index = 0; index < 10; index++) {
-			setTimeout(() => dispatch(data.chat.id, false), 1000);
-		}
-	} else {
-		bot.sendMessage(
-			data.chat.id,
-			`Block user id: ${data.chat.id}, first_name: ${data.chat.first_name}`
-		);
-	}
-});
-
-function dispatch(chatId, toAll = false) {
-	getImage("/dev/video0", 1920, 1080, "1").then((data) =>
-		sendPhoto(data, toAll)
+function dispatch(chatId) {
+	getImage("/dev/video0", 1920, 1080, "1").then((buffer) =>
+		bot.sendPhoto(chatId, buffer, {
+			caption: new Date(),
+		})
 	);
 
 	setTimeout(() => {
-		getImage("/dev/video1", 1920, 1080, "1").then((data) =>
-			sendPhoto(data, toAll)
+		getImage("/dev/video1", 1920, 1080, "1").then((buffer_2) =>
+			bot.sendPhoto(chatId, buffer_2, {
+				caption: new Date(),
+			})
 		);
-	}, 2000);
+	}, 1000);
 }
 
-function sendPhoto(data, toAll = false) {
-	if (!toAll) {
-		bot.sendPhoto(USER_1, data, {
-			caption: new Date(),
-		});
-	} else {
-		bot.sendPhoto(USER_1, data, {
-			caption: new Date(),
-		});
-		bot.sendPhoto(USER_2, data, {
-			caption: new Date(),
-		});
-	}
+function logBlockedUser(data) {
+	bot.sendMessage(
+		USER_1,
+		`Block user id: ${data.chat.id}, first_name: ${
+			data.chat.first_name
+		}, \n ${JSON.stringify(data)}`
+	);
 }
